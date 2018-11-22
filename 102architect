@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import sys
+import math
+
+def test_flag():
+    i = 1
+    while i <= len(sys.argv):
+        if sys.argv[i] == "-t" :
+            i = i + 3
+        elif sys.argv[i] == "-z":
+            i = i + 3
+        elif sys.argv[i] == "-r":
+            i = i + 2
+        elif sys.argv[i] == "-s":
+            i = i + 2
+        else:
+            exit (84)
+
+if len(sys.argv) > 1 :
+    if sys.argv[1] == "-h":
+        print("USAGE\n./102architect x y transfo1 arg11 [arg12] [transfo2 arg12 [arg22]] ...\n\nDESCRIPTION\n    x      absissa of the original point\n    y      ordinate of the original point\n\n    transfo arg1 [arg2]\n    -t i j      transletion along vector (i, j)\n    -z m n      scaling by factors m (x-axis) and n (y-axis)\n    -r d        rototion centred in 0 by a d degree angle\n    -s d        reflection over the axis pasing trough 0 with an inclination\n                angle of d degrees")
+        exit (0)
+    elif len(sys.argv) > 2 :
+        test_flag()
+    else :
+        exit (84)
+else :
+    exit (84)
