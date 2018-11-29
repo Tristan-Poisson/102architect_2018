@@ -3,60 +3,94 @@
 import sys
 import math
 
-def translation(k, matrice, x, y):
-    i = float(sys.argv[k + 1])
-    j = float(sys.argv[k + 2])
-    print("Translation along vector ({:0.2f}, {:0.2f})".format(i, j))
+def translation(k, matrice):
+    i = int(sys.argv[k + 1])
+    j = int(sys.argv[k + 2])
+    print("Translation along vector ({}, {})".format(i, j))
     matrice[0][2] = i
     matrice[1][2] = j
-    x = x + i
-    y = y + j
-    return(x, y, matrice)
-def scale(i, matrice, x, y):
-    m = float(sys.argv[i + 1])
-    n = float(sys.argv[i + 2])
-    print("Scaling by factors {:0.2f} and {:0.2f}".format(m, n))
-    matrice[0][0] = matrice[0][0] * i
-    matrice[1][1] = matrice[1][1] * j
-    x = x * m
-    y = y * n
-    return(x, y, matrice)
+    return(matrice)
+def scale(i, matrice):
+    m = int(sys.argv[i + 1])
+    n = int(sys.argv[i + 2])
+    print("Scaling by factors {} and {}".format(m, n))
+    matrice[0][0] = matrice[0][0] * m
+    matrice[1][1] = matrice[1][1] * n
+    return(matrice)
 
-def test_flag(x, y, matrice):
+def rotate(i, matrice):
+    d = int(sys.argv[i + 1])
+    print("Rotaion by a {} degree angle".format(d))
+    d = math.radians(d)
+    matrice[0][0] = math.cos(d)
+    matrice[1][1] = math.cos(d)
+    matrice[0][1] = -math.sin(d)
+    matrice[1][0] = math.sin(d)
+    return(matrice)
+
+def refl(i, matrice):
+    d =	int(sys.argv[i + 1])
+    print("Reflection over an axis with an inclination angle of {} degrees".format(d))
+    d =	math.radians(d)
+    matrice[0][0] = math.cos(2 * d)
+    matrice[1][1] = -math.cos(2 * d)
+    matrice[0][1] = math.sin(2 * d)
+    matrice[1][0] = math.sin(2 * d)
+    return(matrice)
+
+def calctransfo(matrice, x, y):
+    x2 = x * matrice[0][0] + y * matrice[0][1] + matrice[0][2]
+    y2 = x * matrice[1][0] + y * matrice[1][1] + matrice[1][2]
+    return(x2, y2)
+
+def affichage(x, y, x2, y2, matrice):
+    i = 0
+    while i < 3:
+        if matrice[i][0] < 0:
+            sp1 = "   "
+        else:
+            sp1 = "    "
+        if matrice[i][1] < 0:
+            sp2 = "   "
+        else:
+            sp2 = "    "
+        print("{:.2f}".format(matrice[i][0]), sp1, "{:.2f}".format(matrice[i][1]), sp2, "{:.2f}".format(matrice[i][2]))
+        i += 1
+    print("({}, {}) => ({:.2f}, {:.2f})".format(x, y, x2, y2))
+
+def test_flag(matrice):
     i = 3
     while i + 1 <= len(sys.argv):
         if sys.argv[i] == "-t":
-            print("flag t")
-            x, y, matrice = translation(i, matrice, x, y)
+            matrice = translation(i, matrice)
             i = i + 3
         elif sys.argv[i] == "-z":
-            print("flag z")
+            matrice = scale(i, matrice)
             i = i + 3
         elif sys.argv[i] == "-r":
-            print("flag r")
+            matrice = rotate(i, matrice)
             i = i + 2
         elif sys.argv[i] == "-s":
-            print("flag s")
+            matrice = refl(i, matrice)
             i = i + 2
         else:
-            print("mauvais flag")
             exit (84)
-    return(x, y, matrice)
+    return(matrice)
 
 if len(sys.argv) > 1 :
     if sys.argv[1] == "-h":
         print("USAGE\n./102architect x y transfo1 arg11 [arg12] [transfo2 arg12 [arg22]] ...\n\nDESCRIPTION\n    x      absissa of the original point\n    y      ordinate of the original point\n\n    transfo arg1 [arg2]\n    -t i j      transletion along vector (i, j)\n    -z m n      scaling by factors m (x-axis) and n (y-axis)\n    -r d        rototion centred in 0 by a d degree angle\n    -s d        reflection over the axis pasing trough 0 with an inclination\n                angle of d degrees")
         exit (0)
     elif len(sys.argv) > 2 :
-        x = float(sys.argv[1])
-        y = float(sys.argv[2])
+        x = int(sys.argv[1])
+        y = int(sys.argv[2])
         matrice = [3 * [0] for i in range(3)]
         matrice[0][0] = 1
         matrice[1][1] = 1
         matrice[2][2] = 1
-        print(matrice)
-        x, y, matrice = test_flag(x, y, matrice)
-        print(x, y, matrice)
+        matrice = test_flag(matrice)
+        x2, y2 = calctransfo(matrice, x, y)
+        affichage(x, y, x2, y2, matrice)
     else :
         exit (84)
 else :
