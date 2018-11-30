@@ -20,7 +20,7 @@ def scale(i, matrice):
 
 def rotate(i, matrice):
     d = int(sys.argv[i + 1])
-    print("Rotaion by a {} degree angle".format(d))
+    print("Rotation by a {} degree angle".format(d))
     d = math.radians(d)
     matrice[0][0] = math.cos(d)
     matrice[1][1] = math.cos(d)
@@ -69,7 +69,7 @@ def affichage(x, y, x2, y2, matrice):
             sp2 = "   "
         else:
             sp2 = "    "
-        print("{:.2f}".format(matrice[i][0]), sp1, "{:.2f}".format(matrice[i][1]), sp2, "{:.2f}".format(matrice[i][2]))
+        print("{:.2f}".format(round(matrice[i][0], 2)), sp1, "{:.2f}".format(round(matrice[i][1], 2)), sp2, "{:.2f}".format(round(matrice[i][2], 2)))
         i += 1
     print("({}, {}) => ({:.2f}, {:.2f})".format(x, y, x2, y2))
 
@@ -117,10 +117,10 @@ if len(sys.argv) > 1 :
     elif len(sys.argv) > 2 :
         x = int(sys.argv[1])
         y = int(sys.argv[2])
-        matrice = [3 * [0] for i in range(3)]
-        matrice[0][0] = 1
-        matrice[1][1] = 1
-        matrice[2][2] = 1
+        matrice = [3 * [0.00] for i in range(3)]
+        matrice[0][0] = 1.00
+        matrice[1][1] = 1.00
+        matrice[2][2] = 1.00
         matrice = test_flag(matrice)
         x2, y2 = calctransfo(matrice, x, y)
         affichage(x, y, x2, y2, matrice)
