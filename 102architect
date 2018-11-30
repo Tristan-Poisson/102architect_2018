@@ -43,8 +43,24 @@ def calctransfo(matrice, x, y):
     y2 = x * matrice[1][0] + y * matrice[1][1] + matrice[1][2]
     return(x2, y2)
 
+def check(matrice):
+    i = 0
+    while i < 3:
+        j = 0
+        while j < 3:
+            if matrice[i][j] <= 0:
+                nc = str(matrice[i][j])
+                print(nc)
+                if len(nc) > 5:
+                    if nc[1] == "0" and nc[3] == "0" and nc[4] == "0" or "e-" in nc:
+                        matrice[i][j] = 0.00
+            j += 1
+        i += 1
+    return(matrice)
+
 def affichage(x, y, x2, y2, matrice):
     i = 0
+    matrice = check(matrice)
     while i < 3:
         if matrice[i][0] < 0:
             sp1 = "   "
