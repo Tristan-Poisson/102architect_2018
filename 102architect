@@ -50,7 +50,6 @@ def check(matrice):
         while j < 3:
             if matrice[i][j] <= 0:
                 nc = str(matrice[i][j])
-                print(nc)
                 if len(nc) > 5:
                     if nc[1] == "0" and nc[3] == "0" and nc[4] == "0" or "e-" in nc:
                         matrice[i][j] = 0.00
@@ -74,8 +73,23 @@ def affichage(x, y, x2, y2, matrice):
         i += 1
     print("({}, {}) => ({:.2f}, {:.2f})".format(x, y, x2, y2))
 
+def calcmatrice(matriceg):
+    i = len(matriceg) - 2
+    matricefin = matriceg[i + 1]
+    while i >= 0:
+        j = 0
+        while j < 3:
+            matriceg[i + 1][j][0] = matriceg[i][j][0] * matricefin[0][0] + matriceg[i][j][1] * matricefin[1][0] + matriceg[i][j][2] * matricefin[2][0]
+            matriceg[i + 1][j][1] = matriceg[i][j][0] * matricefin[1][0] + matriceg[i][j][1] * matricefin[1][1] + matriceg[i][j][2] * matricefin[2][1]
+            matriceg[i + 1][j][2] = matriceg[i][j][0] * matricefin[2][0] + matriceg[i][j][1] * matricefin[1][2] + matriceg[i][j][2] * matricefin[2][2]
+            j += 1
+        i -= 1
+        matricefin = matriceg[i + 1]
+    return(matricefin)
+
 def test_flag(matrice):
     i = 3
+    matriceg = []
     while i + 1 <= len(sys.argv):
         if sys.argv[i] == "-t":
             matrice = translation(i, matrice)
@@ -91,6 +105,9 @@ def test_flag(matrice):
             i = i + 2
         else:
             exit (84)
+        matriceg.append(matrice)
+    if len(matriceg) > 1:
+        matrice = calcmatrice(matriceg)
     return(matrice)
 
 if len(sys.argv) > 1 :
